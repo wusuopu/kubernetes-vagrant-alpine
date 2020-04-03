@@ -9,7 +9,7 @@ $vm_cpus = 1
 $vb_cpuexecutioncap = 100
 ip_prefix = '172.18.8.'
 
-# vagrant up --no-parallel
+# vagrant up --no-parallel --provision
 Vagrant.configure(2) do |config|
   (1..$num_instances).each do |i|
     config.vm.define vm_name = "%s-%02d" % [$instance_name_prefix, i] do |node|
@@ -28,6 +28,10 @@ Vagrant.configure(2) do |config|
           KUBE_MASTER_HOST_IP: "#{ip_prefix}101",
           KUBE_NODE_NUM: "#{i}"
         }
+        if i == 1
+          # master
+          d.ports = ["6443:6443"]
+        end
         d.volumes = [
           "#{Dir.getwd}/etc/docker-daemon.json:/etc/docker/daemon.json",
           "#{Dir.getwd}/tmp/var-docker-#{i}:/var/lib/docker"

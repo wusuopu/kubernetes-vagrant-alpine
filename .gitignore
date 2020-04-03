@@ -1,0 +1,4 @@
+tmp/
+.vagrant/
+node-token
+k3s.yaml
